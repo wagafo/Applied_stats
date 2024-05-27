@@ -244,3 +244,7 @@
   AnswerTests: omnitest(correctExpr='my_div')
   Hint: If your programming environment doesn't support auto-completion, just type my_div and hit Enter to move on.
 
+- Class: text
+  Output: This tutorial is completed. Now you know the basics of the R statistical language.
+
+

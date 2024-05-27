@@ -1,0 +1,166 @@
+- Class: meta
+  Course: Applied Statistics
+  Lesson: Data Maniuplation
+  Author: Walter Garcia-Fontes
+  Type: Standard
+  Organization: Universitat Pompeu Fabra
+  Version: 1.0.0
+
+- Class: text
+  Output: 'This tutorial is a transcript of part of Chapter 6 
+   from the book "Probabilities, Statistics and Data: A Fresh Approach 
+   Using R", by Darrin Speegle and Bryan Clair (CRS Press).
+   The tidyverse consists of a collection of R packages designed to work 
+   together, organized around common principles. The central organizing 
+   principle is that data should be tidy. Data should be rectangular, 
+   each row should correspond to one observation, and each column 
+   should correspond to one observed variable. Data should be not 
+   stored in the names of variables.'
+
+- Class: text
+  Output: 'The whole tidyverse can be installed, including many packages, or 
+   individual packages may be installed. Here we already installed and 
+   enabled for you the folllowing packages:
+
+
+   * dplyr
+     This is the main package of the tidyverse
+
+
+   * stringr
+     For basic string operations
+
+
+   * tidyr
+     For restructuring (pivot) a data file
+
+
+   * lubridate
+     For dealing with time and dates
+
+
+   * janitor
+     To clean the names of variables in data frames'
+
+- Class: cmd_question
+  Output: Data in R is usually stored in data frames, with one row per observation and one column per variable. The tidyverse works naturally with data frames but prefers a new data format called a tibble. Sometimes tidyverse tools will automatically convert data frames into tibbles. Or, you can make the conversion yourself using the "as_tibble" function. Use the as_tibble function to convert the base R mtcars package into a tibble, with "as_tibble(mtcars)".
+  CorrectAnswer: as_tibble(mtcars)
+  AnswerTests: omnitest(correctExpr='as_tibble(mtcars)')
+  Hint: You have to enter "as_tibble(mtcars" to convert the mtcars dataframe into a tibble.
+
+- Class: cmd_question
+  Output: This does not change the data set mtcars to a tibble, it is still a data frame, to convert it to tibble it has to be stored in an object with "mtcars <- as_tibble(mtcars)". Do it know.
+  CorrectAnswer: mtcars <- as_tibble(mtcars)
+  AnswerTests: omnitest(correctExpr='mtcars <- as_tibble(mtcars)')
+  Hint: You have to enter "mtcars <- as_tibble(mtcars)".
+
+- Class: text
+  Output: 'Tibbles have some advantages over data frames:
+
+
+   1. Printing: it prints only basic information, a data frame prints all the data.
+
+
+   2. Types consistency: a column of a tibble is also a tibble, a column of a data frame is a vector.'
+
+- Class: cmd_question
+  Output: We have loaded a tibble called "movies" for you, containing a dataset that we will use in this tutorial. Enter "movies" at the R prompt to check what it contains.
+  CorrectAnswer: movies
+  AnswerTests: omnitest(correctExpr='movies')
+  Hint: You have to enter "movies".
+
+- Class: cmd_question
+  Output: 'The dplyr package is organized around commands called verbs. Each verb takes a tibble (or data frame) as its first argument, and possibly additional arguments. For instance, the "filter" verb forms a new data frame satisfying a given condition. For example, if we only want to see the reviews for the film *Fight Club*, we can do it with filter(movies, title == "Fight Club (1999)"). Filter the movies data frame to see only the review for "Toy Story (1995)".'
+  CorrectAnswer: filter(movies, title == "Toy Story (1995)")
+  AnswerTests: omnitest(correctExpr='filter(movies, title == "Toy Story (1995)")')
+  Hint: 'You have to enter filter(movies, title == "Toy Story (1995)").'
+
+- Class: cmd_question
+  Output: 'Or find all user ratings of 1 or less. For this, you have to specify the filter "rating <= 1" in the filter command. Try it now.'
+  CorrectAnswer: filter(movies, rating <= 1)
+  AnswerTests: omnitest(correctExpr='filter(movies, rating <= 1)')
+  Hint: You have to enter filter(movies, rating <= 1).
+
+- Class: cmd_question
+  Output: Or ratings less than one, but only for the "Fight Club (1999)" movie. To do this, try now to include both previous filters in the filter command.
+  CorrectAnswer: filter(movies, title == "Fight Club (1999)", rating <= 1)
+  AnswerTests: any_of_exprs('filter(movies, title == "Fight Club (1999)", rating <= 1)','filter(movies, rating <= 1, title == "Fight Club (1999)")')
+  Hint: 'You have to enter filter(movies, title == "Fight CLub (1999)", rating <= 1) or filter(movies, rating <=1, title == "Fight CLub (1999)").'
+
+- Class: cmd_question
+  Output: 'There are several verbs in the package. The "select" verb allows to select columns (variables) from the data set. For instance "select(movies,rating,moviesID)" selects only the rating and moviesID variables (columns). Enter a command to select the "title" and "genres" variables.'
+  CorrectAnswer: select(movies, title, genres)
+  AnswerTests: any_of_exprs('select(movies,title,genres)','select(movies,genres,title)')
+  Hint: 'You have to enter "select(movies,title,genres)" or "select(movies,genres,title)".'
+
+- Class: cmd_question
+  Output: 'Another verb is "arrange". It forms a new data frame with the rows ordered (sorted) in a specific order. "arrange(movies,timestamp)" creates a new data frame with the movies sorted from oldest to newest. It can be also arranged in descending order with "arrange(movies,desc(timestamp))". Create now a data frame with the movies from largest to lowest rating.'
+  CorrectAnswer: arrange(movies, desc(rating))
+  AnswerTests: omnitest(correctExpr='arrange(movies, desc(rating))')
+  Hint: 'You have to enter "arrange(movies, desc(rating))".'
+
+- Class: cmd_question
+  Output: 'To find the last five reviews (by timestamp) in the data, we can do it with "slice_max(movies, n=5, timestamp)". Is is also possible to find the first five movies according to timestamp with "slice_min(movies, n=5, timestamp)". Find the last 10 movies according to "movieId".'
+  CorrectAnswer: slice_max(movies,n=10,movieId)
+  AnswerTests: omnitest(correctExpr='slice_max(movies,n=10,movieId)')
+  Hint: 'You have to enter "slice_max(movies,n=10,movieId)".'
+
+- Class: cmd_question
+  Output: 'To summarize the data set into a single row, "summarize" can be used. This command computes statistics for the specified variables. For instance "summarize(movies, mean(rating), n())" will produce a data frame with one row showing the mean of rating and the number of cases (rows) in the "movies" data frame   . With "?summarize" the help is printed showing all available statstics. Use "summary" to get the median() and the standard deviation, sd(), for the ratings of the movies.'
+  CorrectAnswer: summarize(movies, median(rating), sd(rating))
+  AnswerTests: any_of_exprs('summarize(movies, median(rating), sd(rating))','summarize(movies, sd(rating),median(rating))')
+  Hint: 'You have to enter "summarize(movies, median(rating), sd(rating))" or "summarize(movies, sd(rating),median(rating))".'
+
+- Class: cmd_question
+  Output: 'The verb "distinct" collapses identical data to produce a single row for each distinct value. For instance to create for a data frame consisting of the unique User IDs, we can write "distinct(movies, userId)". Create now a new data frame with unique values for rating.'
+  CorrectAnswer: distinct(movies,rating)
+  AnswerTests: omnitest(correctExpr='distinct(movies,rating)')
+  Hint: 'You have to enter "distinct(movies,rating)".'
+
+- Class: cmd_question
+  Output: 'We can also create new variables from computations with "mutate". For instance we can create a new variable, we will call it "ID", by combining the user ID and the movie ID with "mutate(movies, ID = paste(userId, movieId)". Use the "mutate" command to create a new variable called "ratetime" combining the "rating" and the "timestamp" variables.'
+  CorrectAnswer: mutate(movies, ratetime = paste(rating, timestamp))
+  AnswerTests: omnitest(correctExpr='mutate(movies, ratetime = paste(rating, timestamp))')
+  Hint: 'You have to enter "mutate(movies, ratetime = paste(rating, timestamp))".'
+
+- Class: cmd_question
+  Output: 'Verb commands can be combined together to perform more complicated operations. The "pipe operator" is the dplyr method for combining verbs. It is the three character symbol "%>%", which can also be typed in Rstudio with ctrl-shift-m. It works by feeding the value produced by a function on the left as first argument of the function of the right. For instance, to filter for the "Vertigo (1958)" movie and then sort according to the timestamp, the following command will work "movies %>%  filter(title == "Vertigo (1958)") %>% arrange(timestamp)". Try to construct a pileline, first filter for "Toy Story (1995)", and instead of "arrange" use "summarize" to compute the mean of "rating" for the filtered movies.'
+  CorrectAnswer: movies %>% filter(title == "Toy Story (1995)") %>% summarize(mean(rating))
+  AnswerTests: omnitest(correctExpr='movies %>% filter(title == "Toy Story (1995)") %>% summarize(mean(rating))')
+  Hint: 'You have to enter movies %>% filter(title == "Toy Story (1995)") %>% summarize(mean(rating)).'
+
+- Class: text
+  Output: Commands using pipes can be also written as a single function with arguments. For instance, the previous command can be also written as "summarize(filter(movies,title == "Toy Story (1995)"),mean(rating))". Using pipes, the command is clearer and easier to write.
+
+- Class: cmd_question
+  Output: 'Pipes can be used in a sequence of any extension. Construct a pipe where you first filter movies for rating equal to 5, then use only title with select(title), show only distinct values with distinct() and finally show the first 5 rows with head(n=5).'
+  CorrectAnswer: movies %>% filter(rating == 5) %>% select(title) %>% distinct() %>% head(n=5)
+  AnswerTests: omnitest(correctExpr='movies %>% filter(rating == 5) %>% select(title) %>% distinct() %>% head(n=5)')
+  Hint: You have to enter 'movies %>% filter(rating == 5) %>% select(title) %>% distinct() %>% head(n=5)'
+
+- Class: cmd_question
+  Output: 'Very often we want to work with groups in the data set. For instance, in the movies data set, each movie creates a group of cases, since it has different recommendations. For instance the movie "Vertigo" appears multiple times in the data set creating the group of cases for this movie. We can see each movie as group using the ```group_by```function, but by itself it just shows the number of groups. Use a pip with movies in the first place and "grup_by(title)" in the second place.'
+  CorrectAnswer: movies %>% group_by(title)
+  AnswerTests: omnitest(correctExpr='movies %>% group_by(title)')
+  Hint: You have to enter 'movies %>% group_by(title)'.
+
+- Class: cmd_question
+  Output: 'Grouping is useful if we want to make computations within groups. For instance, we can add a command to the previous command to compute the mean of rating within each group. Do it now.'
+  CorrectAnswer: movies %>% group_by(title) %>% summarize(mean(rating))
+  AnswerTests: omnitest(correctExpr='movies %>% group_by(title) %>% summarize(mean(rating))')
+  Hint: You have to enter 'movies %>% group_by(title) %>% summarize(mean(rating))'.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
