@@ -149,18 +149,3 @@
   CorrectAnswer: movies %>% group_by(title) %>% summarize(mean(rating))
   AnswerTests: omnitest(correctExpr='movies %>% group_by(title) %>% summarize(mean(rating))')
   Hint: You have to enter 'movies %>% group_by(title) %>% summarize(mean(rating))'.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
