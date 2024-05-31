@@ -1,0 +1,13 @@
+- Class: meta
+  Course: Applied Statistics
+  Lesson: Data Maniuplation
+  Author: Walter Garcia-Fontes
+  Type: Standard
+  Organization: Universitat Pompeu Fabra
+  Version: 1.0.0
+
+- Class: text
+  Output: 'This tutorial is a transcript of part of Chapter 6 
+   from the book "Probabilities, Statistics and Data: A Fresh Approach 
+   Using R", by Darrin Speegle and Bryan Clair (CRS Press).
+

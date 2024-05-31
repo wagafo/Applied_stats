@@ -1,0 +1,83 @@
+- Class: meta
+  Course: Applied Statistics
+  Lesson: Tidy Data
+  Author: Walter Garcia-Fontes
+  Type: Standard
+  Organization: Universitat Pompeu Fabra
+  Version: 1.0.0
+
+- Class: text
+  Output: 'This tutorial is a transcript of part of Chapter 6 
+   from the book "Probabilities, Statistics and Data: A Fresh Approach 
+   Using R", by Darrin Speegle and Bryan Clair (CRS Press).
+   A key feature of tidy data is that all data should be stored in a
+   rectangular array, with each row an observation and each column a 
+   variable. In particular, no information should be stored in variable
+   names. As an example, consider the built-in data set WorldPhone which
+   gives historical data on number of telephones in thousands for some
+   years in the mid 20th century. We have imported this data set for you
+   in this tutorial.'
+
+- Class: cmd_question
+  Output: The WorlPhones data is stored as a matrix with row names. Take a look
+   to the data by entering "WorldPhones" at the command prompt.
+  CorrectAnswer: WorldPhones
+  AnswerTests: omnitest(correctExpr='WorldPhones')
+  Hint: You have to enter "WorldPhones" to see the contents of this data set.
+
+- Class: mult_question
+  Output: Do you think this data set is tidy
+  AnswerChoices: Yes, it is tidy; No, it is not tidy
+  CorrectAnswer: No, it is not tidy
+  AnswerTests: omnitest(correctVal='No, it is not tidy')
+  Hint: Think if each row is a case, and variables do not hold data.
+
+- Class: text
+  Output: The variable names contain data on the region, so the data is not tidy.  Furthermore, the years are not held in a variable, they are just a row name.
+
+
+- Class: cmd_question
+  Output: 'We first convert the data into a tibble, and we add 
+   an extra argument to the 
+   "as_tibble" command, rownames = "year", to put the rownames into a variable
+   called "year". We finally pipe the result into the function clean_names() of
+   the janitor package, to put the names of the columns in a more standard
+   way (all lower case, substitute dots by underscores). Create a pipeline
+   with these instructions, and assign the result to a new dataframe called
+   "phones".'
+  CorrectAnswer: phones <- as_tibble(WorldPhones, rownames = "year") %>% clean_names()
+  AnswerTests: omnitest(correctExpr='phones <- as_tibble(WorldPhones, rownames = "year") %>% clean_names()')
+  Hint: 'You have to enter: phones <- as_tibble(WorldPhones, rownames = "year") %>% clean_names().'
+
+- Class: cmd_question
+  Output: 'Enter "phones" now to see the structure of the new data frame.'
+  CorrectAnswer: phones
+  AnswerTests: omnitest(correctExpr='phones')
+  Hint: 'You have to enter: phones.'
+
+- Class: cmd_question
+  Output: 'As it can be seen now, the rownames have been put into a new
+   variable called "year", and the names of the columns have been standardized.
+   Every entry in this data set gives the value for a year and a region, so 
+   the tidy format should have three variables: year, region and telephones.
+   Making this change will cause this data set to become much longer. Instead
+   of 7 rows and 7 columns, we will have 49 rows, one for each 7 x 7 year
+   and region combinations. The tool to make this change is the pivot_longer
+   function from the tidyr package, which we have enabled for you. The command
+   is phones %>% pivot_longer(cols = !year, names_to = "region", values_to = "telephones").
+   Assign the result to the same "phones" dataframe. Try it now.'
+  CorrectAnswer: phones <- phones %>% pivot_longer(cols = !year, names_to = "region", values_to = "telephones")
+  AnswerTests: omnitest(correctExpr='phones <- phones %>% pivot_longer(cols = !year, names_to = "region", values_to = "telephones")')
+  Hint: 'You have to enter: phones <- phones %>% pivot_longer(cols = !year, names_to = "region", values_to = "telephones").'
+
+- Class: cmd_question
+  Output: 'This function used four arguments. The first was the dataframe we 
+   wanted to pivot, in this case phones. Second, we specified which columns to
+   use, with the expression cols = !year, which meant "all columns except year".
+   Finally, we told the function that the names of the columns should become
+   a new variable called "region", and the values in those columns should
+   become a new variable called "telephone". Enter "phones" now to check how
+   the tidy dataframe looks like.'
+  CorrectAnswer: phones
+  AnswerTests: omnitest(correctExpr='phones')
+  Hint: 'You have to enter: phones.'
