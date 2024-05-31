@@ -13,7 +13,7 @@
    A key feature of tidy data is that all data should be stored in a
    rectangular array, with each row an observation and each column a 
    variable. In particular, no information should be stored in variable
-   names. As an example, consider the built-in data set WorldPhone which
+   names. As an example, consider the built-in data set WorldPhoneskkk which
    gives historical data on number of telephones in thousands for some
    years in the mid 20th century. We have imported this data set for you
    in this tutorial.'
@@ -81,3 +81,46 @@
   CorrectAnswer: phones
   AnswerTests: omnitest(correctExpr='phones')
   Hint: 'You have to enter: phones.'
+
+- Class: cmd_question
+  Output: 'The format with the regions in the columns is called "wide", while
+   the tidy format is called "long". The tidyr package also provides a function
+   pivot_wider which performs the opposite transformation to pivot_longer, that 
+   is, it converts a "long" (tidy) format into a "wide" format. We have loaded
+   a data set called "babynames" that consists of all names of babies born 
+   in the USA from 1880 to 2017, together with the sex assigned to the baby, 
+   the number of babies of that sex given that name in that year, and the
+   proportion of babies with that sex in that year that were given the name.
+   Only names that were given to five or more babies are included. Enter 
+   "head(babynames)" to see the first rows of this data set.'
+  CorrectAnswer: head(babynames)
+  AnswerTests: omnitest(correctExpr='head(babynames)')
+  Hint: 'You have to enter: head(babynames).'
+
+- Class: text
+  Output: 'In the pivot_wider function, we need to provide the names of the 
+   columns with the names_from argument, and a values_from value or values,
+   which gives the columns to get the cell values from. It is often also needed
+   to provide an id_cols variable which uniquely identifies each observation.'
+
+- Class: mult_question
+  Output: 'In the "babynames" data frame, to convert it to a wide format with Females and Males in two different columns, showing the total number of newborns with a given name and sex'
+  AnswerChoices: We have to use id_cols=name, names_from=sex and values_from=n; We have to use id_cols=name, names_from=n and values_from=sex; We have to use id_cols=name, names_from=sex and values_from=prop
+  CorrectAnswer: We have to use id_cols=name, names_from=sex and values_from=n
+  AnswerTests: omnitest(correctVal='We have to use id_cols=name, names_from=sex and values_from=n')
+  Hint: If we want to have two columns, one for females and the other one for 
+   males, we need names_from=sex because this is going to be the names of 
+   the columns in the wide format. Furthermore, values_from=n because we want
+   the total number newborns (female or male).
+
+- Class: cmd_question
+  Output: 'Create a pipeline to first filter the "babynames" data set for
+   year=2000, and then create a wide data set with females and males in 
+   different columns.'
+  CorrectAnswer: babynames %>% filter(year==2000) %>% pivot_wider(id_cols=name, names_from=sex, values_from=n)
+  AnswerTests: omnitest(correctExpr='babynames %>% filter(year==2000) %>% pivot_wider(id_cols=name, names_from=sex, values_from=n)')
+  Hint: 'You have to enter: babynames %>% filter(year==2000) %>% pivot_wider(id_cols=name, names_from=sex, values_from=n).'
+
+- Class: text
+  Output: We have now the same data set, but in wide format. Depending on the 
+   statistical tasks that we want to perform, we will find it more convenient to   use a long or a wide format. This tutorial finishes here.
