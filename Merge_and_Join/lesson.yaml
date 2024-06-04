@@ -1,0 +1,147 @@
+- Class: meta
+  Course: Applied Statistics
+  Lesson: Merge and Join
+  Author: Walter Garcia-Fontes
+  Type: Standard
+  Organization: Universitat Pompeu Fabra
+  Version: 1.0.0
+
+- Class: text
+  Output: 'In this tutorial, we present the merge and join functions of the
+   dplyr package. Merging and joining data sets is one of the most important
+   and common tasks needed for data manipulation. We have two data sets, one
+   we call the origin dataset and the other one the destination dataset.
+   There are four functions in dplyr:
+
+
+   left_join() : Merge two datasets. Keep all observations from the origin
+   table.
+
+
+   right_join() : Merge two datasets. Keep all observations from the destination
+    table.
+
+
+   inner_join() : Merge two datasets. Excludes all unmatched rows.
+
+
+   full_join() : Merge two datasets. Keeps all observations.'
+
+- Class: cmd_question
+  Output: 'We have loaded two data sets, with data coming from the "Star Wars" 
+   saga. The first one is called "humans_droids" and it contains the names
+   and the home world of all humans and droids of the series. Enter
+   "humans_droids" to check its contents.'
+  CorrectAnswer: humans_droids
+  AnswerTests: omnitest(correctExpr='humans_droids')
+  Hint: 'You have to enter "humans_droids".'
+
+- Class: cmd_question
+  Output: 'The second one is called "humans", and it contains only the
+   name of the human characters, and another column that just has a string
+   with "human" for all cases. Enter "humans" to check it contents.'
+  CorrectAnswer: humans
+  AnswerTests: omnitest(correctExpr='humans')
+  Hint: 'You have to enter "humans".'
+
+- Class: cmd_question
+  Output: 'inner_join() - only keeps rows that appear in both tables. The 
+   command syntax is inner_join(humans_droids, humans, by="name") or 
+   humans_droids %>% inner_join(humans, by="name"). Try one of these commands
+   to see the resulting data frame.'
+  CorrectAnswer: inner_join(humans_droids, humans, by="name")
+  AnswerTests: any_of_exprs('inner_join(humans_droids, humans, by="name")', ' humans_droids %>% inner_join(humans, by="name")')
+  Hint: 'You have to enter inner_join(humans_droids, humans, by="name") or 
+   humans_droids %>% inner_join(humans, by="name").'
+
+- Class: figure
+  Output: 'The inner_join function joins the two tables keeping the intersection
+   of them, that is , the cases that appear in both. Since in our example the
+   "humans" table is contained in the "humans_droids" tables, in this case
+   inner_join will be the same as "humans". The diagram on the right illustrates
+   the inner_join function.'
+  Figure: inner_join.R
+  FigureType: new
+
+- Class: cmd_question
+  Output: 'Next up is left_join(), this keeps all of the rows and columns 
+   from the first data set and adds any new columns from the second data
+   set. Where there is a match on our join key, these new rows will be
+   populated with values from the second table. Where there isn''t a match,
+   the row from the first table is still kept and the new columns will
+   simply be given a missing/NA value to show that there was no match
+   in the second table for that row. Let''s see how this looks with our data,
+   try the left_join command, with "humans_droids" as left table and "humans"
+   as right table.'
+  CorrectAnswer: left_join(humans_droids, humans, by="name")
+  AnswerTests: any_of_exprs('left_join(humans_droids, humans, by="name")', ' humans_droids %>% left_join(humans, by="name")')
+  Hint: 'You have to enter left_join(humans_droids, humans, by="name") or 
+   humans_droids %>% left_join(humans, by="name").'
+
+- Class: mult_question
+  Output: Which of the following statements is true?
+  AnswerChoices: The resulting table includes humans and droids; The resulting table includes only humans; The resulting table includes only droids
+  CorrectAnswer: The resulting table includes humans and droids
+  AnswerTests: omnitest(correctVal='The resulting table includes humans and droids')
+  Hint: 'It includes all cases from the "left" table (humans_droids), so it has
+   humans and droids,  but only the cases from the right table that are 
+   also in the left table.'
+
+- Class: figure
+  Output: 'It includes all cases from the "left" table (human_droids), so it has
+   humans and droids,  but only the cases from the right table that are 
+   also in the left table. Since "species" is only 
+   available in the "human" table, for droids it will be missing ("NA").
+   Now the diagram for our left_join() is the one on the right.'
+  Figure: left_join.R
+  FigureType: new
+
+- Class: cmd_question
+  Output: 'As well as left_join(), which keeps a copy of the first table 
+   and appends data from the second, there is its opposite, the right_join().
+   It doesn''t tend to get used much as you can always make a right_join()
+   into a left_join() by switching the table order, but for completeness
+   let''s see it in an example. Enter now a right_join command with 
+   humans_droids as left table and humans as right table.'
+  CorrectAnswer: right_join(humans_droids, humans, by="name")
+  AnswerTests: any_of_exprs('right_join(humans_droids, humans, by="name")', ' humans_droids %>% right_join(humans, by="name")')
+  Hint: 'You have to enter right_join(humans_droids, humans, by="name") or 
+   humans_droids %>% right_join(humans, by="name").'
+
+- Class: mult_question
+  Output: Which of the following statements is true?
+  AnswerChoices: The resulting table includes humans and droids; The resulting table includes only humans; The resulting table includes only droids
+  CorrectAnswer: The resulting table includes only humans
+  AnswerTests: omnitest(correctVal='The resulting table includes only humans')
+  Hint: 'It includes all cases from the "left" table (humans), but excludes
+   the cases from the right table which are not in the right table, so
+   all droids are excluded.'
+
+- Class: figure
+  Output: 'Now the diagram is as shown in the right.'
+  Figure: right_join.R
+  FigureType: new
+
+- Class: cmd_question
+  Output: 'The final join is full_join(). Whereas until now we''ve been only
+    keeping rows that matched in some way a full_join(), as the name suggests,
+    combines both tables fully so we keep all the rows and all the columns
+    from both tables. As all the data from both table is kept it doesn''t
+    matter which is the left table or right table. Enter now this command
+    to see its effects.'
+  CorrectAnswer: full_join(humans_droids, humans, by="name")
+  AnswerTests: any_of_exprs('full_join(humans_droids, humans, by="name")','humans_droids %>% full_join(humans, by="name")','full_join(humans, humans_droids, by="name")', 'humans %>% full_join(humans_droids, by="name")')
+  Hint: 'You have to enter full_join(humans_droids, humans, by="name") or 
+   humans_droids %>% full_join(humans, by="name"), or any of these two
+   commands with the tables reversed in order.'
+
+- Class: figure
+  Output: 'It doesn''t matter now which table is left and which is right, 
+   all cases of both tables are kept, with missing values for the variables
+   for cases in only one of the tables.'
+  Figure: full_join.R
+  FigureType: new
+
+- Class: text
+  Output: This tutorial has shown you the main issues in merging and joining
+   data sets with R.
