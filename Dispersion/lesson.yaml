@@ -8,7 +8,7 @@
   Version: 1.0.0
 
 - Class: text
-  Output: 'Welcome to Lesson 2! In this lesson, we will learn what DISPERSION is and
+  Output: 'In this tutorial, we will learn what DISPERSION is and
     what statistical values are needed in order to best describe the spread of data.
     Further, you will learn all about a box-and-whisker plot which is  a plot commonly
     used by statisticians when determining variability. '
