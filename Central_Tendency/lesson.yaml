@@ -7,7 +7,7 @@
   Version: 1.0.0
 
 - Class: text
-  Output: Today, I'll be teaching you the basics of data analysis. It probably makes
+  Output: Today, we will go over the basics of data analysis. It probably makes
     sense to start by defining the word DATA.
 
 - Class: text
@@ -191,7 +191,7 @@
     NOT the number of times which it appears.
 
 - Class: text
-  Output: 'Congratulations! You''ve made it through your first lesson. We introduced
+  Output: 'This is all for this tutorialx. We introduced
     basic concepts related to data and data analysis. Specifically, you learned three
     important measures of central tendency: mean, median, and mode. You also know
     how to compute these using R.'
