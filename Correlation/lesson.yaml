@@ -1,0 +1,209 @@
+- Class: meta
+  Course: Applied Statistics
+  Lesson: Correlatin
+  Author: Walter Garcia-Fontes
+  Type: Standard
+  Organization: Universitat Pompeu Fabra
+  Version: 1.0.0
+
+- Class: text
+  Output: In today’s tutorial, you’ll be working with a data set of movies
+   to compute correlations with R. We have imported the dataset and we
+   have created a data frame called movies with these data.
+
+- Class: cmd_question
+  Output: Use the str() function to inspect the basics of this dataset.
+  CorrectAnswer: str(movies)
+  AnswerTests: omnitest(correctExpr='str(movies)')
+  Hint: You have to enter "str(movies)" to see the contents of this data set.
+
+- Class: text
+  Output: In this particular data frame, you can see from the console
+   that 2961 observations of 11 variables are present. As a side note,
+   even if each movie was only an hour long, you’d need to watch movies
+   non-stop for over four months to see them all!
+
+- Class: text
+  Output: The output also lists each variable by name, the class of
+   each variable, and a few instances of each variable. This gives us
+   a pretty good idea of what is in the data frame, the understanding
+   of which is crucial to our analytic endeavors.
+
+- Class: cmd_question
+  Output: Another great function to help us perform a quick, high-level
+   overview of our data frame is summary(). Note the similarities and
+   differences between the output produced by running str(). Try now
+   to use summary() to check the contents of the movie data frame.
+  CorrectAnswer: summary(movies)
+  AnswerTests: omnitest(correctExpr='summary(movies)')
+  Hint: You have to enter "summary(movies)" to see the contents of this data set.
+
+- Class: text
+  Output: With a single command, you’ve had R return some key statistical
+   information for each variable in our data frame. Now that you know
+   what you’re working with, let’s dive in and explore the data some further!
+
+- Class: cmd_question
+  Output: In reviewing the variables available to you, it appears that some
+   of the numeric variables can be manipulated to provide new insights
+   into our data frame. For instance, you’ve got gross and budget variables,
+   so why not use a little formula to calculate the profit for each movie?
+   You can calculate profit by using the formula profit = gross - budget. Try
+   to add the profit variable to the data frame.
+  CorrectAnswer: movies$profit <- movies$gross - movies$budget
+  AnswerTests: omnitest(correctExpr='movies$profit <- movies$gross - movies$budget')
+  Hint: You can add the new variable with "movies$profit <- movies$gross - movies$budget".
+
+- Class: mult_question
+  Output: Now that profit has been added as a new column in our data frame,
+   it’s time to take a closer look at the relationships between the
+   variables of your data set. Let’s check out how profit fluctuates
+   relative to each movie’s rating. What do you think is our y variable
+   and what is our x variable?
+  AnswerChoices: profit is y and rating is x; rating is y and profit is x
+  CorrectAnswer: profit is y and rating is x
+  AnswerTests: omnitest(correctVal='profit is y and rating is x')
+  Hint: Think which variable can be think as dependent and which one
+   can be think as indepdent.
+
+- Class: cmd_question
+  Output: We can now create a scatterplot between the dependent and the
+   independent variable, with the code plot(profit~rating, data=movies). Try
+   it now.
+  CorrectAnswer: plot(profit~rating, data=movies)
+  AnswerTests: omnitest(correctExpr='plot(profit~rating, data=movies)')
+  Hint: You can add the new variable with "plot(profit~rating, data=movies)".
+
+- Class: cmd_question
+  Output: In general, it appears that movies with a higher rating tend to
+   have higher profit. Another way to phrase this statement would be to say
+   that a positive correlation exists between rating and profit, at least
+   in our data frame. We can get an idea of this association by tracing
+   a line that tries to capture the general linear trend of this relation.
+   We will compute this line later in this course. For the time being,
+   let us trace it with abline(lm(profit~rating,data=movies)). Try it now.
+  CorrectAnswer: abline(lm(profit~rating,data=movies))
+  AnswerTests: omnitest(correctExpr='abline(lm(profit~rating,data=movies))')
+  Hint: You can add the line with abline(lm(profit~rating,data=movies)).
+
+- Class: text
+  Output: The line is increasing, showing that the first impression of
+   a positive association between rating and profit was correct. That
+   said, even a cursory glance at the plot reveals that there are plenty
+   of highly rated movies that weren't exactly blockbusters, and there
+   are a number of very profitable movies that got relatively low ratings.
+   Correlation does NOT imply causation!
+
+
+- Class: cmd_question
+  Output: So what types of relationships exist between the variables
+   in movies, and how can you evaluate those relationships quantitatively?
+   The correlation coefficient gives us an idea of the strength and
+   direction of the association between two numerical variables. We
+   can get all the correlations between the numerical variables with
+   the cor() function. If we apply it to a data frame, it will show all
+   the correlations, but all variables have to be numerical. In our
+   data frame, from the 4th (year) to the 12th (profit, last) column all are numerical 
+   variables, so we can subset these columns with movies[,4:12]. Try
+   the cor() function with this subset of the movies data frame.
+  CorrectAnswer: cor(movies[,4:12])
+  AnswerTests: omnitest(correctExpr='cor(movies[,4:12])')
+  Hint: The correct command is cor(movies[,4:12]).
+
+- Class: text
+  Output: There are a lot of results in the output of the previous command,
+   since the pairwise correlations of all numerical variables are shown. Most
+   correlations are positive, but there is a negative correlation between 
+   year and duration, showing that apparently more recent movies are shorter
+   (less duration) than older movies, that is a negative association between
+   year and duration. The same is true for the relation of year and rating
+   (more recent movies get lower ratings) and year and profit (more recent
+   movies are less profitable). All other correlations are positive, and
+   the correlation between rating and profit is 0.3, in accordance to the
+   graphs, a positive but weak association.
+
+- Class: cmd_question
+  Output: Instead of looking at the numbers, it may be useful to visualize
+   the correlations. The GGally package (already enabled here) 
+   has a function call ggcorr(), giving
+   a data frame to this function shows the correlation matrix in a graph.
+   Since the correlation is pairwise (it doesn't matter the order of 
+   the arguments, cor(rating,profit) = cor(profit,rating), just showing
+   the upper or lower triangle of the matrix is enough, because the correlation
+   for each pair of variables is the same in the upper and lower triangle.
+   Try the ggcorr() function, giving as argument the subset of the numerical
+   variables of the movies package that we used before.
+  CorrectAnswer: ggcorr(movies[,4:12])
+  AnswerTests: omnitest(correctExpr='ggcorr(movies[,4:12])')
+  Hint: The correct command is ggcorr(movies[,4:12]).
+
+- Class: text
+  Output: It can be seen that most correlations are positive and weak, except
+   a few which have a stronger color. The highest correlation is between 
+   gross and profit, but it is sort of evident, as gross is gross profit and
+   profit is net profit (gross - budget). Another strong correlation is 
+   between votes and reviews, and it is also evident, people who give votes
+   also give reviews. The interesting correlations are the correlations 
+   between profit and rating, review or votes. All of them are positive and
+   weak. Instead the correlations of profit and duration or facebook likes
+   looks close to 0.
+
+- Class: cmd_question
+  Output: The ggcorr function has some nice tweaks to help reading the 
+   correlations. For instance, adding "label = TRUE" will write the value
+   of the correlation in each cell of the matrix, and adding "label_alpha=TRUE"
+   will stroke higher correlations stronger. Try now the ggcorr() function
+   againg adding these two argument.
+  CorrectAnswer: ggcorr(movies[,4:12], label = TRUE, label_alpha = TRUE)
+  AnswerTests: omnitest(correctExpr='ggcorr(movies[,4:12], label = TRUE, label_alpha = TRUE)')
+  Hint: The correct command is ggcorr(movies[,4:12], label = TRUE, label_alpha = TRUE).
+
+- Class: cmd_question
+  Output: The correlation coefficient shows us the strength and the direction
+   of the linear association between two numerical variables. For instance
+   the correlation between votes and reviews is strong and positive, though
+   evident. We can check this association with the scatterplot between
+   these two variables, plot(reviews~votes, data=movies). Try it now.
+  CorrectAnswer: plot(reviews~votes, data=movies)
+  AnswerTests: omnitest(correctExpr='plot(reviews~votes, data=movies)')
+  Hint: The scatterplot is obtained with plot(reviews~votes, data=movies).
+
+- Class: cmd_question
+  Output: We can add a line to the plot with abline(lm(reviews~votes,data=movies)). 
+   Try it now.
+  CorrectAnswer: abline(lm(reviews~votes,data=movies))
+  AnswerTests: omnitest(correctExpr='abline(lm(reviews~votes,data=movies))')
+  Hint: The line is added with abline(lm(reviews~votes,data=movies)).
+
+- Class: cmd_question
+  Output: Instead the relation between year and profit is negative and weak.
+   Plot a scatterplot using the code that we learnt in the previous combination
+   of variables (y is profit and x is year).
+  CorrectAnswer: plot(profit~year, data=movies)
+  AnswerTests: omnitest(correctExpr='plot(profit~year, data=movies)')
+  Hint: The scatterplot is obtained with plot(profit~year, data=movies).
+
+- Class: cmd_question
+  Output: Add a line to the scatterplot you just got, with the abline() 
+   function that we used before.
+  CorrectAnswer: abline(lm(profit~year,data=movies))
+  AnswerTests: omnitest(correctExpr='abline(lm(profit~year,data=movies))')
+  Hint: The line is added with abline(lm(profit~year,data=movies)).
+
+- Class: cmd_question
+  Output: We can finally put everything together with the ggpairs() function
+   of the GGally package. We will subset the movies dataset keeping only
+   three variables, with movies[,c("votes","reviews","profit")]. Give
+   this subset data frame as an argument to ggpairs() to obtain a summary
+   of the relationship between these variables. Add also another argument
+   to the ggpairs function, "lower = list(continuous = "smooth")", to get
+   a line in the scatterplots. Try it now.
+  CorrectAnswer: ggpairs(movies[,c("votes","reviews","profit")],lower = list(continuous = "smooth"))
+  AnswerTests: omnitest(correctExpr='ggpairs(movies[,c("votes","reviews","profit")],lower = list(continuous = "smooth"))')
+  Hint: The line is added with ggpairs(movies[,c("votes","reviews","profit")],lower = list(continuous = "smooth")).
+
+- Class: text
+  Output: Now we got the correlation coefficient for each pair in the upper triangle, a 
+   density curve showing the distribution of each variable separately in the
+   diagonal, and the scatterplots with a line in the lower triangle. This 
+   finishes the tutorial on correlations.
