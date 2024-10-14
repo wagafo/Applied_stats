@@ -118,7 +118,8 @@
     for which we need the probability of the event (0.02) and the
     size (100). 
 
-- Class: text: The mean in a binomial distribution with probability
+- Class: text
+  Output: The mean in a binomial distribution with probability
     p and size n is the size multiplied by the probability 
     of the event (in this case 0.02*100= 2, which makes sense, if 2%
     is the probability of defective we expect 2 out of 100 to be
