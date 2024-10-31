@@ -11,7 +11,7 @@ library(ggplot2)
 #get correct paths for plotting
 pathtofile <- function(fileName){
   mypath <- file.path(.get_course_path(),
-  	"R_Tutorials","Significance_Testing",                      
+  	"Applied_stats","Significance_Testing",                      
                       fileName)
 }
 fxfer <- function(fileName){
