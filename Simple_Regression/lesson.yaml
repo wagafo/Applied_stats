@@ -180,7 +180,7 @@
   AnswerChoices: that for each point a student gets in the midterm, it is predicted he or she will get 1.127 points on average in the final; that for each point a student gets in the final, it is predicted he or she will get 1.127 points on average in the midterm
   CorrectAnswer: that for each point a student gets in the midterm, it is predicted he or she will get 1.127 points on average in the final
   AnswerTests: omnitest(correctVal='that for each point a student gets in the midterm, it is predicted he or she will get 1.127 points on average in the final')
-  Hint: The regression line predicts the linear asysociation of the explanatory variable (grade in the midterm) and the dependent variable (grade in the final).
+  Hint: The regression line predicts the linear association of the explanatory variable (grade in the midterm) and the dependent variable (grade in the final).
 
 - Class: cmd_question
   Output: It is nice to plot the regression line in the scatterplot. For this,
