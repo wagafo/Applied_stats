@@ -1,0 +1,165 @@
+- Class: meta
+  Course: Applied stats
+  Lesson: Non-Parametric Regression
+  Author: Walter Garcia-Fontes
+  Type: Standard
+  Organization: Universitat Pompeu Fabra
+  Version: 1.0.0
+
+- Class: text
+  Output: In this tutorial we will present some techniques for the
+    analysis of non-parametric regression with R. 
+
+- Class: cmd_question
+  Output: Sometimes the spread of the data is so large that we cannot figure
+    any linear relation between the variables or the pattern suggested 
+    does not clearly correspond to a linear pattern or any other known
+    function. So we can let the data talk by itself without imposing
+    any funcional form to the association between y an x. There 
+    are several tools in R for non-parametric regression.
+    We have loaded a data set for you, with two variables, Y is the
+    time in minutes that takes to perform a task by different teams, in a
+    firm, and X is the number of members of each team. Take a look at the
+    data frame using the head() function, the data frame is called "task".
+  CorrectAnswer: head(task)
+  AnswerTests: omnitest(correctExpr='head(task)')
+  Hint: You have to enter "head(task)" to check the first cases of the "task"
+    data frame.
+
+- Class: cmd_question
+  Output: We have saved the X and Y variables in the current R workspace, so
+    that you can work with their names directly, without having to refer to
+    the data frame name. Prepare a scatterplot of Y (time to finish a task)
+    against X (number of members of the team), using the plot() function.
+  CorrectAnswer: plot(Y~X)
+  AnswerTests: omnitest(correctExpr='plot(Y~X)')
+  Hint: You have to enter "plot(Y~X)" to get a scatterplot of Y against X.
+
+- Class: mult_question
+  Output: According to what you see in the scatterplot
+  AnswerChoices: there is a lot spread and it is hard to figure out the
+    relation between the variables; there is a very clear positive association; there is a very clear negative association
+  CorrectAnswer: there is a lot spread and it is hard to figure out the
+    relation between the variables
+  AnswerTests: omnitest(correctVal='there is a lot spread and it is hard to figure out the relation between the variables')
+  Hint: As it can be seen in the data it is hard to figure out the relationship
+    between Y and X.
+
+- Class: figure
+  Output: We have prepared the residual plot for the linear regression
+    between Y and X for you. You can check it on the right window.
+  Figure: figure_resid.R
+  FigureType: new
+
+- Class: mult_question
+  Output: The residual plot shows
+  AnswerChoices: a possible non-linear association; a possible linear association
+  CorrectAnswer: a possible non-linear association
+  AnswerTests: omnitest(correctVal='a possible non-linear association')
+  Hint: For low values of X the residuals are positive, for intermediate values
+    of X the residuals are negative, and for high values of X the residuals
+    are positive again.
+
+- Class: figure
+  Output: We have drawn the scatterplot now with the regression line. We
+    can see that the regression line does not fit well to the points in the
+    scatterplot, and that it shows a very weak linear association.
+  Figure: figure_fit.R
+  FigureType: new
+
+- Class: cmd_question
+  Output: 'The first thing that we can try is to bin the X variable in 
+    different groups and check the average Y within each group. We first
+    create 3 groups for X, for teams with less than 6 members, 6 or less 
+    than 10 members and more than 10 members. We can do this using the 
+    mutate package of the dplyr package, which has been loaded, with the
+    code: task <- mutate(task, bins = cut(X, breaks = c(0,5,9,14))). Try 
+    this code now.'
+  CorrectAnswer: taks <- mutate(task, bins = cut(X, breaks = c(0,5,9,14)))
+  AnswerTests: omnitest(correctExpr='task <- mutate(task, bins = cut(X, breaks = c(0,5,9,14)))')
+  Hint: You have to enter "task <- mutate(task, bins = cut(X, breaks = c(0,5,9,14)))" to bin the values of X in three groups.
+
+- Class: cmd_question
+  Output: We will now use the plotmeans function of the gplots package
+    to obtain a binscatter for these data. We can do it with 
+    plotmeans(Y~bins, data=task). Run this code now.
+  CorrectAnswer: plotmeans(Y~bins, data=task)
+  AnswerTests: omnitest(correctExpr='plotmeans(Y~bins, data=task)')
+  Hint: You have to enter "plotmeans(Y~bins, data=task)" to obtain a binscatter
+    with 3 groups.
+
+- Class: text
+  Output: In the binscatter we can appreciate a non-linear pattern. An U 
+    shaped relationship, with a minimum in the group 5 to 9 members. Groups
+    with less or more members perform the task spending more time.
+  
+- Class: cmd_question
+  Output: 'It is also useful to represent the binscatter with the 
+    scatterplot. For this we need to use the ggplot2 package, which
+    can produce professional looking plot, but it is more complex than
+    the base R plotting functions. We have loaded the package and we
+    start constructin the binscatter. The first command creates the 
+    object and sets a x-y graph. It is d <- ggplot(task,aes(X,Y)). 
+    Enter it now.'
+  CorrectAnswer: d <- ggplot(task,aes(X,Y))
+  AnswerTests: omnitest(correctExpr='d <- ggplot(task,aes(X,Y))')
+  Hint: You have to enter "d <- ggplot(task aes(X,Y))" to start
+    constructing the plot.
+
+- Class: cmd_question
+  Output: 'Next, we add the points of the scatterplot to the object 
+    with d <- d + geom_point().'
+  CorrectAnswer: d <- d + geom_point()
+  AnswerTests: omnitest(correctExpr='d <- d + geom_point()')
+  Hint: You have to enter "d <- d <- d + geom_point()" to add
+    the points of the scatterplot to the object.
+
+- Class: cmd_question
+  Output: 'The next step consists in creating three bins in X and
+    computing the mean of Y within these bins and connecting each 
+    point with a line, : d <- d + stat_summary_bin(fun = mean, 
+    bins=3, geom="line").'
+  CorrectAnswer: d <- d + stat_summary_bin(fun = mean, bins=3, geom="line")
+  AnswerTests: omnitest(correctExpr='d <- d + stat_summary_bin(fun = mean, bins=3, geom="line")')
+  Hint: You have to enter "d <- d + stat_summary_bin(fun = mean, 
+    bins=3, geom="line")" to compute the means and connect them with
+    a line.
+
+- Class: cmd_question
+  Output: 'And finally, we represent a point at each bin to show the mean within
+    the bin and we show the plot: d + stat_summary_bin(fun = mean, bins=3, 
+    geom="point")'
+  CorrectAnswer: d + stat_summary_bin(fun = mean, bins=53, geom="point")
+  AnswerTests: omnitest(correctExpr='d + stat_summary_bin(fun = mean, bins=3, geom="point")')
+  Hint: You have to enter "d + stat_summary_bin(fun = mean, 
+    bins=3, geom="point")" to show points for the means and plot the graph.
+
+- Class: text
+  Output: We can see again the same pattern. The more efficient teams are
+    medium sized teams.
+
+- Class: cmd_question
+  Output: We will use now the "plotluck" package in R to smooth the variation
+    of the dependent variable and get an idea of a possible non-linear
+    relation between Y and X. For doing this the command is
+    plotluck(task,Y~X), remembering that the name of the data frame is task,
+    Y is the time to perform a task, and X is the number of members of the
+    team which performs the task. Enter this command now.
+  CorrectAnswer: plotluck(task,Y~X)
+  AnswerTests: omnitest(correctExpr='plotluck(task,Y~X)')
+  Hint: You have to enter "plotluck(task,Y~X)" to get a trace of the relation
+    between Y and X.
+
+- Class: mult_question
+  Output: The number of members in the team which is optimal (it minimizes
+    the time to perform the task) is approximately
+  AnswerChoices: 6; 4; 10
+  CorrectAnswer: 6
+  AnswerTests: omnitest(correctVal='6')
+  Hint: Check for which value of X the value of Y is at a minimum, according
+    to the plots
+
+- Class: text
+  Output: This finishes the tutorial on some non-parametric regression tools
+    with R, a useful technique to describe complex associations between 
+    numerical variables.
