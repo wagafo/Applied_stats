@@ -68,7 +68,7 @@
 
 - Class: cmd_question
   Output: We can now create a scatterplot between the dependent and the
-   independent variable, with the code plot(profit~rating, data=movies). Try
+   indpendent variable, with the code plot(profit~rating, data=movies). Try
    it now.
   CorrectAnswer: plot(profit~rating, data=movies)
   AnswerTests: omnitest(correctExpr='plot(profit~rating, data=movies)')
@@ -87,13 +87,12 @@
   Hint: You can add the line with abline(lm(profit~rating,data=movies)).
 
 - Class: text
-  Output: The line is increasing, showing that the first impression of
+  Ouput: The line is increasing, showing that the first impression of
    a positive association between rating and profit was correct. That
    said, even a cursory glance at the plot reveals that there are plenty
-   of highly rated movies that weren't exactly blockbusters, and there
+   of highly rated movies that weren’t exactly blockbusters, and there
    are a number of very profitable movies that got relatively low ratings.
    Correlation does NOT imply causation!
-
 
 - Class: cmd_question
   Output: So what types of relationships exist between the variables
@@ -122,13 +121,14 @@
    the correlation between rating and profit is 0.3, in accordance to the
    graphs, a positive but weak association.
 
+
 - Class: cmd_question
   Output: Instead of looking at the numbers, it may be useful to visualize
    the correlations. The GGally package (already enabled here) 
    has a function call ggcorr(), giving
    a data frame to this function shows the correlation matrix in a graph.
    Since the correlation is pairwise (it doesn't matter the order of 
-   the arguments, cor(rating,profit) = cor(profit,rating), just showing
+   the arguments: cor(rating,profit) = cor(profit,rating), just showing
    the upper or lower triangle of the matrix is enough, because the correlation
    for each pair of variables is the same in the upper and lower triangle.
    Try the ggcorr() function, giving as argument the subset of the numerical
@@ -155,7 +155,7 @@
    will stroke higher correlations stronger. Try now the ggcorr() function
    againg adding these two argument.
   CorrectAnswer: ggcorr(movies[,4:12], label = TRUE, label_alpha = TRUE)
-  AnswerTests: omnitest(correctExpr='ggcorr(movies[,4:12], label = TRUE, label_alpha = TRUE)')
+  AnswerTests: omnitest(correctExpr='ggcorr(movies[,4:12]), label = TRUE, label_alpha = TRUE')
   Hint: The correct command is ggcorr(movies[,4:12], label = TRUE, label_alpha = TRUE).
 
 - Class: cmd_question
@@ -176,9 +176,9 @@
   Hint: The line is added with abline(lm(reviews~votes,data=movies)).
 
 - Class: cmd_question
-  Output: Instead the relation between year and profit is negative and weak.
+  Output: Instead the relation between years and profit is negative and weak.
    Plot a scatterplot using the code that we learnt in the previous combination
-   of variables (y is profit and x is year).
+   of variables.
   CorrectAnswer: plot(profit~year, data=movies)
   AnswerTests: omnitest(correctExpr='plot(profit~year, data=movies)')
   Hint: The scatterplot is obtained with plot(profit~year, data=movies).
@@ -203,7 +203,9 @@
   Hint: The line is added with ggpairs(movies[,c("votes","reviews","profit")],lower = list(continuous = "smooth")).
 
 - Class: text
-  Output: Now we got the correlation coefficient for each pair in the upper triangle, a 
+  Output: Now we got the correlation coefficient for each pair in the upper triangle , a 
    density curve showing the distribution of each variable separately in the
    diagonal, and the scatterplots with a line in the lower triangle. This 
    finishes the tutorial on correlations.
+
+

@@ -1,0 +1,202 @@
+- Class: meta
+  Course: Applied stats
+  Lesson: Non Linear Patterns
+  Author: Walter Garcia-Fontes
+  Type: Standard
+  Organization: Universitat Pompeu Fabra
+  Version: 1.0.0
+
+- Class: text
+  Output: Linear regression analysis, as its name shows, is appropriate for
+    the description of the linear relation between two variables. In other
+    words, when at a scatterplot we see that the relationship fits well to
+    a linear relation, we can apply linear regression analysis, always taking
+    into account to define a dependent and an explanatory variable to describe
+    this relation. In some cases, though, the scatterplot will show us
+    a relation that is not adjusting well to what a line would suggest.
+
+- Class: cmd_question
+  Output: We have loaded for you a data frame called "effadv", which
+    corresponds to a set of firms for which we have collected data on
+    expenditures in advertising ("adv") and sales ("sales").
+    We expect that a positive change in advertising will be associated
+    with a positive change in average sales.
+    Let's look at the scatterplot, with plot(sales~adv, data=effadv). 
+    Try it now.
+  CorrectAnswer: plot(sales~adv, data=effadv)
+  AnswerTests: omnitest(correctExpr='plot(sales~adv, data=effadv)')
+  Hint: You have to enter "plot(sales~adv, data=effadv)" to get a 
+    scatterplot between sales and advertising.
+
+- Class: cmd_question
+  Output: The cloud of points suggests a possible non-linear relationship
+    between advertising and sales. But we can get a better picture by
+    drawing also the regression line in the scatterplot with
+    abline(lm(sales~adv, data=effadv)). Do it now.
+  CorrectAnswer: abline(lm(sales~adv, data=effadv))
+  AnswerTests: omnitest(correctExpr='abline(lm(sales~adv, data=effadv))')
+  Hint: You have to enter "abline(lm(sales~adv, data=effadv))" to draw 
+    the regression line.
+
+- Class: mult_question
+  Output: The regression line shows us that for low values the line is
+    systematically above the real points, for intermediate values it is below,
+    and for high values it is above again. According to this, if you want
+    to predict the amount of sales for an advertising expenditure equal to 4.5
+  AnswerChoices: there will be an overprediction; the prediction will be right; there will be an underprediction
+  CorrectAnswer: there will be an overprediction
+  AnswerTests: omnitest(correctVal='there will be an overprediction')
+  Hint: Think what value would the line predict for a value of advertising
+    equal to 4.5, compared to the actual values (the red circles).
+
+- Class: cmd_question
+  Output: a simple way of dealing with non-linearities of this type is
+    using the log-log model. In the log-log model we take natural logarithms
+    of the dependent and explanatory variables, and we run the regression
+    with the transformed variables. Let us convert first the dependent
+    variable with effadv$lsales <- log(effadv$sales). Do it now.
+  CorrectAnswer: effadv$lsales <- log(effadv$sales)
+  AnswerTests: omnitest(correctExpr='effadv$lsales <- log(effadv$sales)')
+  Hint: You have to enter "effadv$lsales <- log(effadv$sales)" to 
+    transform the sales variable to logs.
+
+- Class: cmd_question
+  Output: Do the same log transformation now with the advertising ("adv") and
+    call the new variable "ladv".
+  CorrectAnswer: effadv$ladv <- log(effadv$adv)
+  AnswerTests: omnitest(correctExpr='effadv$ladv <- log(effadv$adv)')
+  Hint: You have to enter "effadv$ladv <- log(effadv$adv)" to transform 
+    the sales variable to logs.
+
+- Class: cmd_question
+  Output: Plot now a scatterplot between lsales and ladv.
+  CorrectAnswer: plot(lsales~ladv, data=effadv)
+  AnswerTests: omnitest(correctExpr='plot(lsales~ladv, data=effadv)')
+  Hint: You have to enter "plot(lsales~ladv, data=effadv)" to plot a 
+    scatterplot between lsales and ladv.
+
+- Class: cmd_question
+  Output: Add now a regression line to the picture with
+    abline(lm(lsales~ladv, data=effadv)).
+  CorrectAnswer: abline(lm(lsales~ladv, data=effadv))
+  AnswerTests: omnitest(correctExpr='abline(lm(lsales~ladv, data=effadv))')
+  Hint: You have to enter "abline(lsales~ladv, data=effadv))" to plot a 
+    regression line in the new scatterplot.
+
+- Class: mult_question
+  Output: The scatterplot with the transformed variables shows
+  AnswerChoices: a linear relationship; the same non-linearity as before
+  CorrectAnswer: a linear relationship
+  AnswerTests: omnitest(correctVal='a linear relationship')
+  Hint: Check now if the points spread more evenly above and below the
+    regression line.
+
+- Class: cmd_question
+  Output: We can now compute the regression line and perform a prediction
+    for a value of advertising equal to 4.5. We first obtain the regression
+    coefficients for the transformed variables with 
+    lm(lsales~ladv, data=effadv).   Do it now.
+  CorrectAnswer: lm(lsales~ladv, data=effadv)
+  AnswerTests: omnitest(correctExpr='lm(lsales~ladv, data=effadv)')
+  Hint: You have to enter "lm(lsales~ladv, data=effadv)" to obtain the 
+    regression coefficients.
+
+- Class: cmd_question
+  Output: We can now predict for advertising equal to 4.5, but remember
+    that the regression has been run with the transformed variables,
+    so we have to use log(4.5). The command is then
+    predict(lm(lsales~ladv),data.frame(ladv=log(4.5)), data=effadv). Try it now.
+  CorrectAnswer: predict(lm(lsales~ladv),data.frame(ladv=log(4.5)), data=effadv)
+  AnswerTests: omnitest(correctExpr='predict(lm(lsales~ladv),data.frame(ladv=log(4.5)), data=effadv)')
+  Hint: You have to enter "predict(lm(lsales~ladv),data.frame(ladv=log(4.5)), data=effadv)" to predict the value of log sales for advertising equal to 4.5.
+
+- Class: cmd_question
+  Output: The value that you obtained, 2.921418, is actually log(sales) and
+    not just sales. To go back to sales, you have to apply the exponential
+    function (since exp(log(x)) = x). You can do this by entering
+    exp(2.921418). Do it now.
+  CorrectAnswer: exp(2.921418)
+  AnswerTests: omnitest(correctExpr='exp(2.921418)')
+  Hint: You have to enter "exp(2.921418)" to obtain the prediction in sales,
+    and not log(sales).
+
+- Class: text
+  Output: You could have done this in just one step with
+    exp(predict(lm(lsales~ladv),data.frame(ladv=log(4.5)), data=effadv)), 
+    but that's a really long command. Apart from improving the fit, which 
+    is a statistical reason 
+    of the log tranformation, there could be also substantive reasons, like
+    trying to interpret better the results of the regression.
+
+- Class: mult_question
+  Output: In the log-log
+    model, the value of the slope can be interpreted as a percentage change
+    in the dependent variable, on average, due to a percentage change in 
+    the explanatory variable. For the linear regression that you just ran, 
+    if there is a change of 10% of more advertising, the average sales 
+    predicted change is
+  AnswerChoices: 1.3% ; 13% ; 28%
+  CorrectAnswer: 1.3%
+  AnswerTests: omnitest(correctVal='1.3%')
+  Hint: The slope gives us the percentual change, so 0.13% corresponds to 
+    a 1% change in advertising, and 1.3% corresponds to a 10% change.
+
+- Class: cmd_question
+  Output: Another possibility is to run a level-log regression. In this 
+    case the explanatory variable is transformed in logs, but the dependent
+    variable is used in levels, that is without tranforming it. Run now 
+    the level-log regression model with the lm() function.
+  CorrectAnswer: lm(sales~ladv, data=effadv)
+  AnswerTests: omnitest(correctExpr='lm(sales~ladv, data=effadv)')
+  Hint: You have to enter "lm(sales~ladv, data=effadv)" to run the 
+    level log regression.
+
+- Class: mult_question
+  Output: With the level-log regression, we can how a percentage change in 
+    the explanatory variable affects the average predicted value of the 
+    dependent variable. So if advertising is 10% higher, sales is predicted
+    on average to be
+  AnswerChoices: 0.2 higher; 2 higher;  17 higher
+  CorrectAnswer: 0.2 higher
+  AnswerTests: omnitest(correctVal='0.2 higher')
+  Hint: The slope gives us the 1/100 change, so a 1% change in the explanatory
+    variable is associated with a 2/100 change in average sales, therefore
+    a 10% change in advertising is associated with a 2/10 =0.2 average change
+    in sales.
+
+- Class: cmd_question
+  Output: Looking at the original scatterplot of sales against advertising, 
+    it can be seen that also a quadratic function could fit to these data.
+    To run a quadratic regression, we just add a quadratic term to the 
+    simple regression. The quadratic term is the square of advertising.
+    Create now this quadratic term, call it adv2, and add it to the effadv 
+    data frame.
+  CorrectAnswer: effadv$adv2 <- effadv$adv^2
+  AnswerTests: omnitest(correctExpr='effadv$adv2 <- effadv$adv^2')
+  Hint: You have to enter "effadv$adv2 <- effadv$adv^2" to compute
+    the square of advertising.
+
+- Class: cmd_question
+  Output: Run now the quadratic regression using the new variable that 
+    you just created.
+  CorrectAnswer: lm(sales~adv + adv2, data=effadv)
+  AnswerTests: omnitest(correctExpr='lm(sales~adv + adv2, data=effadv)')
+  Hint: You have to enter "lm(sales~adv + adv2, data=effadv)" to run
+    the quadratic regression.
+
+- Class: cmd_question
+  Output: To check the change on average sales associated with a unit change
+    in advertising we have to use the formula beta1 + 2 * beta2 * X, where
+    beta1 is the estimated coefficient for X, and beta2 is the estimated
+    coefficient for X squared. If the average of sales is 2.29, compute
+    the associated change in average predicted sales.
+  CorrectAnswer: 2.0130 + 2*(-0.1967)*2.29
+  AnswerTests: omnitest(correctExpr='2.0130 + 2*(-0.1967)*2.29')
+  Hint: You have to enter "2.0130 + 2*(-0.1967)*2.29" to compute 
+    the change in average predicted change due to a one unit change 
+    in average sales.
+
+- Class: text
+  Output: This concludes this tutorial on non-linear patterns and different
+    procedures to improve the fit.
+
