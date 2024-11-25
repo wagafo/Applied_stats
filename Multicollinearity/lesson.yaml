@@ -1,0 +1,220 @@
+- Class: meta
+  Course: R Tutorials
+  Lesson: Multicollinearity
+  Author: Walter Garcia-Fontes
+  Type: Standard
+  Organization: Universitat Pompeu Fabra
+  Version: 1.0.0
+
+- Class: text
+  Output: In this tutorial, you will learn how to test for
+   Multicollinearity using R. Please note that due to the nature of R,
+   there are often many different ways to achieve the same analysis as
+   the R-user community develop different commands and codes or refine
+   existing ones.
+
+- Class: text
+  Output: Collinearity is an association or correlation between two
+   predictor (or independent) variables in a statistical model;
+   multicollinearity is where more than two predictor (or independent)
+   variables are associated. The absence of collinearity or
+   multicollinearity within a dataset is an assumption of a range of
+   statistical tests, including the test of significance for linear
+   regression coefficients.
+
+- Class: figure
+  Output: We have created for you a data set called "data_collinear"
+   with the commands that you can see in the figure on the right.
+  Figure: figure_com.R
+  FigureType: new  
+
+- Class: text
+  Output: If you check the R commands on the right, you can see that
+   two normally distributed variables are created, x1 and x2, and a
+   third variable x3 is created which is an exact linear combination
+   of x1 and x2.
+
+- Class: cmd_question
+  Output: Compute a linear regression of y on x1, x2 and x3, and save
+   the results in an object called "fit".
+  CorrectAnswer: fit <- lm(y~x1 + x2 + x3)
+  AnswerTests: omnitest(correctExpr='fit <- lm(y~x1 + x2 + x3)')
+  Hint: You have to enter "fit <- lm(y~x1 + x2 + x3)".
+
+- Class: cmd_question
+  Output: Check now the results using the summary() function on the
+   "fit" object that you just created.
+  CorrectAnswer: summary(fit)
+  AnswerTests: omnitest(correctExpr='summary(fit)')
+  Hint: You have to enter "summary(fit)".
+
+- Class: text
+  Output: If you check the results, you can see that R shows all
+   missing values ("NA") for x3. In other words, R decided to exclude
+   this variable. Why is this happening? Since x3 is a linear
+   combination of x1 and x2, x3 is not adding any information that
+   x1 and x2 do not contain, so the linear regression procedure cannot
+   estimate a separate effect on y from x3 once it obtained the
+   effects of x1 and x2. This is what we call "perfect collinearity".
+  
+- Class: cmd_question
+  Output: Check now what happens if we run a regression of y on x1 and
+   x3, that is we exclude x2. Enter directly summary(lm(y~x1 + x3)).
+  CorrectAnswer: summary(lm(y~x1 + x3))
+  AnswerTests: omnitest(correctExpr='summary(lm(y~x1 + x3))')
+  Hint: You have to enter "summary(lm(y~x1 + x3))".  
+
+- Class: text
+  Output: As you can see, now R is able to estimate a coefficient
+   for x3. It is no surprise, as now x1 and x3 provide different
+   information, since x1 and x3 are not an exact linear combination as
+   before. We could also estimate x2 and x3 excluding x1 because of
+   the same reason.
+
+- Class: text
+  Output: Exact collinearity like in this case is an extreme example
+   of collinearity, which occurs in multiple regression when predictor
+   variables are highly correlated. Collinearity is often called
+   multicollinearity, since it is a phenomenon that really only occurs
+   during multiple regression. 
+   
+- Class: text
+  Output: We have uploaded a data set for you called "seapost". The
+   predictors in this dataset are various attributes of car 
+   drivers, such as their height, weight and age. The response variable
+   hipcenter measures the “horizontal distance of the midpoint of the
+   hips from a fixed location in the car in mm.” Essentially, it
+   measures the position of the seat for a given driver. This is
+   potentially useful information for car manufacturers considering
+   comfort and safety when designing vehicles.
+
+- Class: text   
+  Output: We will attempt to fit a model that predicts hipcenter. Two
+   predictor variables are immediately interesting to us. HtShoes and
+   Ht. We certainly expect a person’s height to be highly correlated to
+   their height when wearing shoes. We’ll pay special attention to
+   these two variables when fitting models.
+
+- Class: cmd_question
+  Output: In order to identify potentially collinear variables, we can
+   analyze the correlation between the different variables of the
+   data set. We can first do this visually by obtaining scatterplots
+   between all the possible pairs of variables in the data set. We ca
+   achieve this with the pairs() function, giving as argument the name
+   of the data set. Try it now.
+  CorrectAnswer: pairs(seatpos)
+  AnswerTests: omnitest(correctExpr='pairs(seatpos)')
+  Hint: You have to enter "pairs(seatpos)" to get all possible
+   scatterplots between pairs of variables in the data set.
+
+- Class: cmd_question
+  Output: From the matrix of scatterplots, we can see that the
+   correlation between Ht and HtShoes is extremely high. We can confirm
+   this by getting the correlation matrix. Recall that correlation
+   measures strength and direction of the linear relationship between
+   two variables. Enter round(cor(seatpos),2) to get the correlation
+   matrix rounded to two decimal points.
+  CorrectAnswer: round(cor(seatpos),2)
+  AnswerTests: omnitest(correctExpr='round(cor(seatpos),2)')
+  Hint: You have to enter "round(cor(seatpos),2)" to get all possible
+   correlations between the variables of the data set seapos, rounded
+   to two decimal points.
+
+- Class: cmd_question
+  Output: The correlation between Ht and HtShoes is extremely high. So
+   high, that rounded to two decimal places, it appears to be 1! Unlike
+   exact collinearity, here we can still fit a model with all of the
+   predictors, but what effect does this have? We can refer to all
+   the variables in the data set in the lm() function with a dot, ".",
+   so that lm(hipcenter ~ ., data = seatpos) will regress hipcenter
+   against all the rest of variables. Try it now saving the results
+   into and object called "hip_model".
+  CorrectAnswer: hip_model <- lm(hipcenter ~ ., data = seatpos)
+  AnswerTests: omnitest(correctExpr='hip_model <- lm(hipcenter ~ ., data = seatpos)')
+  Hint: You have to enter "hip_model <- lm(hipcenter ~ ., data =
+   seatpos)" to fit a regression of hipcenter against the rest of the
+   variables of the data set.
+
+- Class: cmd_question
+  Output: Check now the results saved in hip_model using the summary()
+   function.
+  CorrectAnswer: summary(hip_model)
+  AnswerTests: omnitest(correctExpr='summary(hip_model)')
+  Hint: You have to enter "summary(hip_model)" to see the regression output
+  
+- Class: mult_question
+  Output: According to what you see in the regression output
+  AnswerChoices: the explanatory variables are jointly significant; the explanatory variables are not jointly significant; the explanatory variables are individually significant.
+  CorrectAnswer: the explanatory variables are jointly significant
+  AnswerTests: omnitest(correctVal='the explanatory variables are jointly significant')
+  Hint: Check the P-Value for the F-test reported at the bottom of the
+   regression output.
+
+- Class: text
+  Output: One of the first things we should notice is that the F-test
+   for the regression tells us that the regression is significant,
+   however each individual predictor is not. Another interesting result
+   is the opposite signs of the coefficients for Ht and HtShoes. This
+   should seem rather counter-intuitive. Increasing Ht increases
+   hipcenter, but increasing HtShoes decreases hipcenter? This happens
+   as a result of the predictors being highly correlated. For example,
+   the HtShoe variable explains a large amount of the variation in
+   Ht. When they are both in the model, their effects on the response
+   are lessened individually, but together they still explain a large
+   portion of the variation of hipcenter.
+
+- Class: cmd_question
+  Output: The variance inflation factor quantifies the effect of
+   collinearity on the variance of our regression estimates. The vif
+   function from the faraway package calculates the VIFs for each of
+   the predictors of a model. Try it now, giving as an argument the
+   hip_model object where we save the regression results.
+  CorrectAnswer: vif(hip_model)
+  AnswerTests: omnitest(correctExpr='vif(hip_model)')
+  Hint: You have to enter "vif(hip_model)" to see the variance
+   inflation factors.
+
+- Class: text   
+  Output: In practice it is common to say that any VIF greater than 5
+   is cause for concern. So in this example we see there is a huge
+   multicollinearity issue as many of the predictors have a VIF greater
+   than 5.
+
+- Class: cmd_question
+  Output: Run now a shorter model, regressing hipcenter on only
+   Age, Arm and Ht. Save the results in a new object called
+   hip_model_small.
+  CorrectAnswer: hip_model_small <- lm(hipcenter ~ Age + Arm + Ht, data = seatpos)
+  AnswerTests: omnitest(correctExpr='hip_model_small <- lm(hipcenter ~ Age + Arm + Ht, data = seatpos)')
+  Hint: You have to enter "hip_model_small <- lm(hipcenter ~ Age + Arm
+   + Ht, data = seatpos)" to estimate the short model.
+
+- Class: cmd_question
+  Output: Check the variance inflation factors for the short model.
+  CorrectAnswer: vif(hip_model_small)  
+  AnswerTests: omnitest(correctExpr='vif(hip_model_small)  ')
+  Hint: You have to enter "vif(hip_model_small)  " to check the
+   variance inflation factors of the small model.
+
+- Class: text
+  Output: Immediately we see that multicollinearity isn’t an issue
+   here. 
+
+- Class: text
+  Output: If the variables of our regression model are jointly
+   significant, the model will be useful for prediction. But if we want
+   to understand the effect of the explanatory variables on our
+   dependent variable, than highly correlated explanatory variables
+   will be a problem. This trade off is mostly true in general. As a
+   model gets more predictors, errors will get smaller and its
+   prediction will be better, but it will be harder to interpret. This
+   is why, if we are interested in explaining the relationship between
+   the predictors and the response, we often want a model that fits
+   well, but with a small number of predictors with little
+   correlation.
+
+- Class: text
+  Output: This finishes this tutorial on multicollinearity in
+   regression.
+  
+  
