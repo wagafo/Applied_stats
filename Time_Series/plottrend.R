@@ -1,0 +1,7 @@
+sales <- c(122520,149931,162481,122630,132818,178325,205781,158807,163083,221728,237244,186756,187123,238305,250138,195399)
+period <- c("2012Q1","2012Q2","2012Q3","2012Q4","2013Q1","2013Q2","2013Q3","2013Q4","2014Q1","2014Q2","2014Q3","2014Q4","2015Q1","2015Q2","2015Q3","2015Q4")
+icecream <- data.frame(period,sales)
+icecream.ts <- ts(icecream$sales,start=c(2012,1),frequency=4)
+decomp.ts <- decompose(icecream.ts,type="additive")
+plot <- autoplot(icecream.ts,series="Sales")+autolayer(decomp.ts$trend, series= "MA4 Trend")+labs(x="Quarter",y="Icecream sales")+ggtitle("Icecream sales with trend")
+print(plot)

@@ -1,0 +1,5 @@
+Y <- c(1,3,5,7,3,4,9,10,3,6,11,14,5,7,15,16,3,4,19,20)
+Series <- ts(Y,start=c(2011,1),frequency=4)
+plot.ts(Series)
+rm(Y)
+rm(Series)

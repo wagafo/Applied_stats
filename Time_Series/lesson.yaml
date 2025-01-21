@@ -1,0 +1,325 @@
+- Class: meta
+  Course: Data analysis
+  Lesson: Time series
+  Author: Walter Garcia-Fontes
+  Type: Standard
+  Organization: Universitat Pompeu Fabra
+  Version: 1.0.0
+
+- Class: text
+  Output: Very often, socioeconomic data is given as time series. A time
+    series is different from cross section data. Cross section data can
+    be seen as a photograph of several individuals at a given point in
+    time. Time series, instead, are like a movie of a single individual
+    along time. In this lesson we will learn the basic tools to analyze
+    time series with R.
+
+- Class: cmd_question
+  Output: A time series is just a series of numbers indexed in chronological
+    order. The data frequency can be yearly, monthly, quarterly, daily, and
+    so on. We will work with the data corresponding to sales in an
+    ice cream shop. Data has been collected for each quarter from the
+    first quarter of 2012 until the last quarter of 2015. The data are
+    in a data frame called "icecream" that we have already loaded for you.
+    Check the first cases of this data set with the head() function.
+  CorrectAnswer: head(icecream)
+  AnswerTests: omnitest(correctExpr='head(icecream)')
+  Hint: You have to write "head(icecream)" to check the first cases of
+    the "icecream" data frame.
+
+- Class: cmd_question
+  Output: We have to create a "time series" object from the data frame
+    data so that R can apply its time series features to it. The ts()
+    function creates these time series objects. This function has three
+    arguments. The first one is a time series, in our case "icecream$sales".
+    The second one tells R where the series starts, in our case we have
+    to enter "start = c(2012,1)" to tell R that the series starts at
+    the first quarter of 2012. Finally, we have to tell R the frequency
+    of our time series, in our case it is equal to 4, since there are 4
+    quarters within each year. This last argument has to be entered in our
+    case as "frequency=4". Create now the time series object with the
+    ts() function and these three arguments, and assign the result to
+    "icecream.ts".
+  CorrectAnswer: icecream.ts <- ts(icecream$sales,start=c(2012,1),frequency=4)
+  AnswerTests: omnitest(correctExpr='icecream.ts <- ts(icecream$sales,start=c(2012,1),frequency=4)')
+  Hint: Write "icecream.ts <- ts(icecream$sales,start=c(2012,1),frequency=4)"
+    to create a time series object and assign the result to "icecream.ts".
+
+- Class: text
+  Output: A time series is just a number for each period, but we think
+    that there is a model explaining this number. We think that the value
+    of the series is formed by several components, and we call
+    "series model" the way these  components are combined. The three main
+    components are the trend (T), the seasonality (S), and the irregular
+    component (I). There could be other components, such as the cyclical
+    component, but in this tutorial we will ignore them. The series model
+    can be additive, where the series will be Y = T + S + I, or multiplicative,
+    where the series is formed as Y = T * S * I.
+
+- Class: cmd_question
+  Output: How do we know if a series is additive or multiplicative? Let's
+    first represent the series graphically. We can do it with the
+    plot.ts() function, giving as first argument the time series object
+    we have just created.
+  CorrectAnswer: plot.ts(icecream.ts)
+  AnswerTests: omnitest(correctExpr='plot.ts(icecream.ts)')
+  Hint: You have to write  "plot.ts(icecream.ts" to prepare the time
+    series plot of the sales in the ice cream shop.
+
+- Class: text
+  Output: As we can see at the time series plot, the time series has
+    an increasing trend in sales. There is also a strong seasonality,
+    during the first and fourth quarters the series is below the trend,
+    while at the second and third quarters the series is above the trend.
+    Furthermore, we see that an additive model can be appropriate for this
+    series, since the seasonal components have always approximately the
+    same size.
+
+- Class: figure
+  Output: Series with seasonal components that get larger (which is
+    what happens most often) or smaller over time can be better represented
+    by a multiplicative model. The graph on the right shows a series
+    which would be better represented by a multiplicative model.
+  Figure: multiplica.R
+  FigureType: new
+
+- Class: cmd_question
+  Output: Turning to our ice cream sales series, we will decompose the series
+    into its components using the additive model. For this, we can use the
+    decompose() function, which will decompose the series into the trend
+    (moving average of the same order as the frequency of the series, in
+    this case 4), seasonality and irregular component. We have to give two
+    arguments. The first argument is the time series object "icecream.ts"
+    that we created. The second one is 'type="additive"' if the model is
+    additive, and 'type="multiplicative"' if the model is multiplicative.
+    Let's decompose the "icecream.ts" series using the additive model, and
+    assign the result to a new object called "decomp.ts".
+  CorrectAnswer: decomp.ts <- decompose(icecream.ts,type="additive")
+  AnswerTests: omnitest(correctExpr='decomp.ts <- decompose(icecream.ts,type="additive")')
+  Hint: You have to write "decomp.ts <- decompose(icecream.ts,type="additive")"
+    to decompose the series into its trend, seasonal and irregular components.
+
+- Class: cmd_question
+  Output: The decompose() function identifies the trend with a moving
+    average of the same order as the series frequency, in our case 4.
+    If furthermore the frequency is even, the moving average will be centered.
+    To see the values of the trend enter "decomp.ts$trend". Do it now.
+  CorrectAnswer: decomp.ts$trend
+  AnswerTests: omnitest(correctExpr='decomp.ts$trend')
+  Hint: Write "decomp.ts$trend)" to see the values of the centered moving
+    average of order 4, that is, the trend of the series.
+
+- Class: cmd_question
+  Output: To confirm that the series that we just showed really represents
+    the trend of the series, we can now get the time series plot of the
+    series jointly with the trend. We can get this plot with ts.plot().
+    As first argument we give the series, and as second argument the
+    trend we have just identified. Try it now.
+  CorrectAnswer: ts.plot(icecream.ts,decomp.ts$trend)
+  AnswerTests: omnitest(correctExpr='ts.plot(icecream.ts,decomp.ts$trend)')
+  Hint: Write "ts.plot(icecream.ts,decomp.ts$trend)" to get the time series
+    plot of the series with the trend.
+
+- Class: text
+  Output: This graph is sufficient if we want to use if for our own
+    observation, but it is no very informative if we want to use it in
+    reports or presentations. For this, we would like to have color and
+    legends to identify the series and the trend.
+
+- Class: figure
+  Output: We can embellish the graph a lot using the autoplot() function
+    of the ggplot2 package. We show you here an example, at future tutorials
+    we can learn how to use this graphical package. The command that generated
+    the graph is
+    autoplot(icecream.ts,series="Sales")+autolayer(decomp.ts$trend, series= "MA4 Trend")+labs(x="Quarter",y="Ice Cream Sales")+ggtitle("Ice Cream Sales with Trend").
+  Figure: plottrend.R
+  FigureType: new
+
+- Class: cmd_question
+  Output: The seasonal component is a fixed value for each quarter, it
+    does not change over the years. It is obtained by eliminating the trend
+    from the series and getting rid of the irregular components (using
+    that the mean of the irregular component is equal to 0 in the additive
+    model, and equal to 1 in the multiplicative model). To see the seasonal
+    component, we can enter "decomp.ts$seasonal". Enter it now.
+  CorrectAnswer: decomp.ts$seasonal
+  AnswerTests: omnitest(correctExpr='decomp.ts$seasonal')
+  Hint: Write "decomp.ts$seasonal" to see the seasonal component series.
+
+- Class: cmd_question
+  Output: Taking into account that the seasonal component is the same value
+    for a given quarter, we only need 4 values. We can see them for the
+    4 quarter with "decomp.ts$figure", in order from the beginning of
+    the series, first quarter, second quarter, third quarter and
+    fourth quarter (if the series does not start in quarter 1, this
+    would show the first quarter available in the series).
+    Enter this command now.
+  CorrectAnswer: decomp.ts$figure
+  AnswerTests: omnitest(correctExpr='decomp.ts$figure')
+  Hint: Write "decomp.ts$figure" to see the four seasonal components.
+
+- Class: cmd_question
+  Output: Lastly, the irregular component is what is left once we have
+    explained the trend and the seasonality. It cannot be explained by
+    any systematic movement of the series. We can see the values of the
+    irregular component with "decomp.ts$random". Try it now.
+  CorrectAnswer: decomp.ts$random
+  AnswerTests: omnitest(correctExpr='decomp.ts$random')
+  Hint: Write "decomp.ts$random" to see the irregular component.
+
+- Class: cmd_question
+  Output: We can plot the original series and these three decomposition
+    series (trend, seasonal and irregular components) using the plot()
+    function and giving it as argument the object produced by the
+    decomposition, "decomp.ts". Get this plot now.
+  CorrectAnswer: plot(decomp.ts)
+  AnswerTests: omnitest(correctExpr='plot(decomp.ts)')
+  Hint: Enter "plot(decomp.ts)" to see the original series and the three
+    components jointly.
+
+- Class: text
+  Output: At the plot, we can see the original series at the top, with the
+    trend computed by the moving averages below, next you can find the
+    seasonal components, and at the bottom whatever is left once we have
+    explained the trend and the seasonality, that is, what we cannot explain
+    from systemic movements of the series.
+
+- Class: text
+  Output: There is another way of representing the trend, consisting in
+    the computation of the linear trend, that is a linear regression between
+    the series and a correlative series of number representing time
+    (t = 1, 2, 3, 4, and so on).
+
+- Class: cmd_question
+  Output: To obtain the linear trend we can use the command
+    tslm(icecream.ts~trend). Get the linear trend and assign the result
+    to an object called "lintrend".
+  CorrectAnswer: lintrend <- tslm(icecream.ts~trend)
+  AnswerTests: omnitest(correctExpr='lintrend <- tslm(icecream.ts~trend)')
+  Hint: Write "lintrend <- tslm(icecream.ts~trend)" to obtain the linear trend
+    of the time series.
+
+- Class: cmd_question
+  Output: We can see now this linear trend jointly with the series using
+    again ts.plot() with the command
+    ts.plot(icecream.ts,fitted(lintrend)). Get this plot now.
+  CorrectAnswer: ts.plot(icecream.ts,fitted(lintrend))
+  AnswerTests: omnitest(correctExpr='ts.plot(icecream.ts,fitted(lintrend))')
+  Hint: Write "ts.plot(icecream.ts,fitted(lintrend))" to obtain a plot
+    of the series with the linear trend superimposed.
+
+- Class: cmd_question
+  Output: The linear trend is just a linear regression. To see the constant
+    and the slope of this regression, just write "lintrend" to print them.
+    Try it now.
+  CorrectAnswer: lintrend
+  AnswerTests: omnitest(correctExpr='lintrend')
+  Hint: Write "lintrend" and the regression constant and slope will be printed.
+
+- Class: cmd_question
+  Output: The linear trend is also useful to predict. To perform a prediction,
+    we have first to figure out the value of the auxiliary variable "Time"
+    for the period we want to predict. Remember that our series starts
+    at the first quarter of 2012 and finishes in the last quarter of 2015.
+    Assume that we want to predict the value of the trend for the third
+    quarter of 2016. This is three quarters beyond the last quarter of the
+    series. To check what is the last value of "Time" within the series,
+    we have to check how many periods there are in the series. We can do
+    this with the length(icecream.ts) command. Figure out how many periods
+    there are in the series.
+  CorrectAnswer: length(icecream.ts)
+  AnswerTests: omnitest(correctExpr='length(icecream.ts)')
+  Hint: Write "length(icecream.ts)" to see the length of the "icecream.ts"
+    series.
+
+- Class: cmd_question
+  Output: Now that we know that the series has 16 periods, we know that
+    the "Time" auxiliary series arrives to t=16 within the original series.
+    If we want to predict for three periods in the future, that is the
+    third quarter of 2016, we will have t = 16 + 3 = 19. This is the value
+    of t we will have to use to predict. We perform the prediction with the
+    predict() function, as we did with the linear regression. Therefore
+    the command to obtain the prediction for the third quarter of 2017
+    will be predict(lintrend,data.frame(trend=19)). Get now this prediction.
+  CorrectAnswer: predict(lintrend,data.frame(trend=19))
+  AnswerTests: omnitest(correctExpr='predict(lintrend,data.frame(trend=19))')
+  Hint: Write "predict(lintrend,data.frame(trend=19))" to get the prediction
+    for the third quarter of 2016.
+
+- Class: cmd_question
+  Output: This is just a prediction of the trend, but we know that the
+    series sometimes is below the trend and some other times is above the
+    trend, according to the seasonal component that we computed. To
+    perform the prediction taking into account the seasonality, therefore
+    the command will be
+    predict(lintrend,data.frame(trend=19)) + decomp.ts$figure[3],
+    since we are predicting for the third quarter of 2016. Get now the
+    prediction adjusted by the trend.
+  CorrectAnswer: predict(lintrend,data.frame(trend=19))+decomp.ts$figure[3]
+  AnswerTests: omnitest(correctExpr='predict(lintrend,data.frame(trend=19))+decomp.ts$figure[3]')
+  Hint: Write "predict(lintrend,data.frame(trend=19))+decomp.ts$figure[3]"
+    to get the seasonally adjusted prediction for ice cream sales.
+
+- Class: cmd_question
+  Output: For a series that we think is best modelled by a multiplicative
+    model, the procedures are the same, but taking into account that
+    components are combined by multiplications, Y = T*S*I. Therefore
+    instead of sums and differences, the procedures imply multiplications and
+    divisions. We have created another quarterly time series with seasonal
+    movements that are amplified over time, and we have saved it in a series
+    called "series2". Decompose the series using the decompose() function,
+    and specify that the model is multiplicative with 'type="multiplicative"'.
+    Assign the result to "series2.d".
+  CorrectAnswer: series2.d <- decompose(series2,type="multiplicative")
+  AnswerTests: omnitest(correctExpr='series2.d <- decompose(series2,type="multiplicative")')
+  Hint: Write "series2.d <- decompose(series2,type="multiplicative")" to
+    obtain the components of the "series2" series using a multiplicative model.
+
+- Class: cmd_question
+  Output: Plot now the series and its components using the plot() function,
+    and using the object "series2.d" we just created.
+  CorrectAnswer: plot(series2.d)
+  AnswerTests: omnitest(correctExpr='plot(series2.d)')
+  Hint: Enter "plot(series2.d)" to obtain a plot of the series and its
+    components.
+
+- Class: cmd_question
+  Output: For a multiplicative series, the seasonal components are around
+    1 (or 100 if shown as percentages). They are larger than 1 if the
+    series is above the trend, and below 1 if the series is below the trend.
+    Check the seasonal components with "series2.d$seasonal".
+  CorrectAnswer: series2.d$seasonal
+  AnswerTests: omnitest(correctExpr='series2.d$seasonal')
+  Hint: Write "series2.d$seasonal" to have R show the seasonal components.
+
+- Class: cmd_question
+  Output: As you can see, for the first two quarters the series is below
+    the trend, while for the last two quarters it is above the trend.
+    The series goes from the first quarter of 2012 until the last quarter
+    of 2016, a year longer than the first example. Therefore it has 20 periods.
+    To perform a prediction for the third quarter of 2017, we first adjust
+    a linear trend with "tslm(series2~trend)". Do it now, assigning the
+    result to "fit2".
+  CorrectAnswer: fit2 <- tslm(series2~trend)
+  AnswerTests: omnitest(correctExpr='fit2 <- tslm(series2~trend)')
+  Hint: Use "tslm(series2~trend)" to compute the constant and the slope
+    of a linear trend for the "series2" series, and assign the result to
+    "fit2".
+
+- Class: cmd_question
+  Output: To perform the prediction we use t=23, since the series arrives
+    until t=20, and considering that we want to predict 3 periods into the
+    future. To predict the trend we use "predict(fit2,data.frame(trend=23))"
+    and furthermore we adjust the seasonal component of the third quarter
+    with "series2.d$figure[3]", but remember that the model is multiplicative.
+  CorrectAnswer: predict(fit2,data.frame(trend=23))*series2.d$figure[3]
+  AnswerTests: omnitest(correctExpr='predict(fit2,data.frame(trend=23))*series2.d$figure[3]')
+  Hint: With "predict(fit2,data.frame(trend=23))" we can predict the linear
+    trend, and to adjust the seasonal component we have to multiply the
+    trend by the seasonal component of the third quarter, therefore the
+    command is predict(fit2,data.frame(trend=23))*series2.d$figure[3].
+
+- Class: text
+  Output: With this we have finished the presentation of the basic techniques
+    of times series, we know how to decompose the series, and how to predicxt
+    using a linear trend adjusted with the seasonal component.
