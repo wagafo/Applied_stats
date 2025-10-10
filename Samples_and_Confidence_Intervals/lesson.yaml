@@ -40,7 +40,7 @@
     first row of the table you just created.
   CorrectAnswer: samples[1,]
   AnswerTests: omnitest(correctExpr='samples[1,]')
-  Hint: To print the first raw of the matrix, and all its columns, you
+  Hint: To print the first row of the matrix, and all its columns, you
     have to issue the command "samples[1,]".
 
 - Class: cmd_question

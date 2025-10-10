@@ -1,0 +1,150 @@
+- Class: meta
+  Course: Applied stats
+  Lesson: Logit and Probit
+  Author: Walter Garcia-Fontes
+  Type: Standard
+  Organization: Walter Garcia-Fontes
+  Version: 1.0.0
+
+- Class: text
+  Output: This tutorial deals with the estimation of regressions where the 
+    dependent variable is a dummy variable.  Since the dependent variable can 
+    only take 0 or 1 values, the aim of the estimation is to predict the 
+    probability of an outcome, which models the occurrence of a given event.
+
+- Class: text
+  Output: In this tutorial we are going to work with a dataset from the
+    Swiss labor market (SwissLabor). The outcome to be explained is 
+    labour market
+    participation, that is, if the worker is working or seeking a job
+    actively. The variable describing participation is a dummy variable
+    equal to 1 if the worker is participating in the labor market. Six
+    variables are included to check for associations with labor market
+    participation. The variables are log of income (income), age in
+    decades (age), education
+    level (20 levels from 1, low education, to 20, high education), youngkids
+    (1 if the worker has children younger than 6), oldkids (1 if the worker
+    has children 6 or older) and foreign (1 if the worker is an immigrant).
+
+- Class: cmd_question
+  Output: Check the dataset with the str() function.
+  CorrectAnswer: str(SwissLabor)
+  AnswerTests: omnitest(correctExpr='str(SwissLabor)')
+  Hint: You have to enter "str(SwissLabor)".
+
+- Class: cmd_question
+  Output: Before doing any in depth analysis,it is convenient to obtain descriptive statistics of all the variables. For instance, a table of the participation variable. Obtain a table for this variable using the table() function.
+  CorrectAnswer: table(SwissLabor$participation)
+  AnswerTests: omnitest(correctExpr='table(SwissLabor$participation)')
+  Hint: You have to enter "table(SwissLabor$participation)".
+
+- Class: cmd_question
+  Output: The unconditional probability of participating in the labor market
+    can be deduced from the previous command, it is about 46%. Considering
+    that we have additional individual characteristics that can be taken
+    into account, we can also include them in the analysis. A first
+    possibility is to just run a linear regression of participation on
+    all the other variables. This can be done with the usual lm() function. 
+    Remember that the explanatory variables are income, age, education, 
+    youngkids and oldkids. Try it now. Put the results in an object called "m1".
+  CorrectAnswer: m1 <- lm(participation ~ income + age + education + youngkids + oldkids , data=SwissLabor)
+  AnswerTests: omnitest(correctExpr='m1 <- lm(participation ~ income + age + education + youngkids + oldkids , data=SwissLabor)')
+  Hint: You have to enter "m1 <- lm(participation ~ income + age + education + youngkids + oldkids , data=SwissLabor)".
+
+- Class: cmd_question
+  Output: Now show the regression output with summary(m1).
+  CorrectAnswer: summary(m1)
+  AnswerTests: omnitest(correctExpr='summary(m1)')
+  Hint: You have to enter "summary(m1)".
+
+- Class: text
+  Output: This is called the linear probability model. Since the dependent variable is a dummy
+    variable, that is it can have values between 0 and 1, the coefficient  of the regression for
+    a particular variable
+    shows the probability that the difference in the probability that the 
+    dependent variable is equal to one comparing two different values of the explanatory 
+    variable, holding the other explanatory variables constant. In this case it is the 
+    probability that the 
+    the worker participates in the labor market. The problem with the linear probability
+    model is that the coefficients are not constrained between 0 and 1, as a probability should be, 
+    and so they can predict a value of the dependent variable larger than 1 or smaller than 0. 
+
+- Class: mult_question
+  Output: How does the probability of participation change when the worker is one decade older, on 
+    average?
+  AnswerChoices: It is 12.2% smaller;It is 12.2% larger;It doesn't change
+  CorrectAnswer: It is 12.2% smaller
+  AnswerTests: omnitest(correctVal='It is 12.2% smaller')
+  Hint: We have to check the coefficient for the "age" variable, which is equal to -12.2, so 
+    the probability of participation on average is 12.2% smaller when the worker is one decade older.
+
+- Class: text
+  Output: In order to assure that the predicted probabilities have values between 0 and 1, to 
+    other models are used, called "logit" and "probit". The difference between the is the functional
+    form used to constrain the values of the dependent variable between 0 and 1. 
+
+- Class: cmd_question
+  Output: We first estimate the logit model. There are several packages in R to estimate this
+    kind of models. Here we will use the "glm" function from base R. Put the results 
+    in an object called "m2". The syntaxis is "glm(participation ~ income + age + education + youngkids + oldkids, data=SwissLabor, family="binomial"). Try it now.
+  CorrectAnswer: m2 <- glm(participation ~ income + age + education + youngkids + oldkids, data=SwissLabor, family='binomial')
+  AnswerTests: omnitest(correctExpr='m2 <- glm(participation ~ income + age + education + youngkids + oldkids, data=SwissLabor, family="binomial")')
+  Hint: You have to enter "m2 <- glm(participation ~ income + age + education + youngkids + oldkids, data=SwissLabor, family="binomial")".
+
+- Class: cmd_question
+  Output: Now show the logit output with summary(m2).
+  CorrectAnswer: summary(m2)
+  AnswerTests: omnitest(correctExpr='summary(m2)')
+  Hint: You have to enter "summary(m2)".
+
+- Class: cmd_question
+  Output: The coefficients in the logit regression cannot be interpreted as probabilities, like 
+    how we did it with the linear probability model. We can only get the direction of the association 
+    with the sign of the coefficient, for instance we can see that age is negatively associated
+    with the probability of participating. The signs of the coefficients coincide with the signs
+    of the coefficients in the linear probability model. We will check later how to show the
+    coefficients are probabilities. 
+
+- Class: cmd_question
+  Output: Before converting the coefficiento into probabilities we will estimate the probit model. 
+    We will use again the "glm" function from base R. Put the results 
+    in an object called "m3". The syntaxis is "glm(participation ~ income + age + education + youngkids + oldkids, data=SwissLabor, family=binomial(link="probit")). Try it now.
+  CorrectAnswer: m3 <- glm(participation ~ income + age + education + youngkids + oldkids, data=SwissLabor, family=binomial(link="probit"))
+  AnswerTests: omnitest(correctExpr='m3 <- glm(participation ~ income + age + education + youngkids + oldkids, data=SwissLabor, family=binomial(link="probit"))')
+  Hint: You have to enter "m3 <- glm(participation ~ income + age + education + youngkids + oldkids, data=SwissLabor, family=binomial(link="probit"))".
+
+- Class: cmd_question
+  Output: Now show the probit output with summary(m3).
+  CorrectAnswer: summary(m3)
+  AnswerTests: omnitest(correctExpr='summary(m3)')
+  Hint: You have to enter "summary(m3)".
+
+- Class: cmd_question
+  Output: Now the coefficients have a different value from the logit and linear probability models,
+    and they are not related again with the probability of participation. In order to get the 
+    coefficients of the logit and probit as an estimate of the change in the expected probability of
+    participation, the so called "marginal effects" are used. First we compute the marginal
+    effects for the logit model. We use the "logitmfx" function from the "mfx" package. Its sintax
+    is similar to the regression functions, logitmfx(participation ~ income + age + education + youngkids + oldkids, data=SwissLabor, atmean=FALSE). Put the results in an object called m4.
+  CorrectAnswer: m4 <- logitmfx(participation ~ income + age + education + youngkids + oldkids, data=SwissLabor, atmean=FALSE)
+  AnswerTests: omnitest(correctExpr='m4 <- logitmfx(participation ~ income + age + education + youngkids + oldkids, data=SwissLabor, atmean=FALSE)')
+  Hint: You have to enter "m4 <- logitmfx(participation ~ income + age + education + youngkids + oldkids, data=SwissLabor, atmean=FALSE)".
+
+- Class: cmd_question
+  Output: Similarly, "probitmfx" it the name of the function to compute the marginal effects for
+    the probit model. Use it now and put the resuts in and object called m5.
+  CorrectAnswer: m5 <- probitmfx(participation ~ income + age + education + youngkids + oldkids, data=SwissLabor, atmean=FALSE)
+  AnswerTests: omnitest(correctExpr='m5 <- probitmfx(participation ~ income + age + education + youngkids + oldkids, data=SwissLabor, atmean=FALSE)')
+  Hint: You have to enter "m5 <- probitmfx(participation ~ income + age + education + youngkids + oldkids, data=SwissLabor, atmean=FALSE)".
+
+- Class: cmd_question
+  Output: To check the results, we are going to use the "huxreg" function of the "huxtable" package. The 
+    syntax is huxreg("LMP"=m1, "Logit"=m4, "Probit"=m5). Try it now.
+  CorrectAnswer: huxreg("LMP"=m1, "Logit"=m4, "Probit"=m5)
+  AnswerTests: omnitest(correctExpr='huxreg("LMP"=m1, "Logit"=m4, "Probit"=m5)')
+  Hint: You have to enter huxreg("LMP"=m1, "Logit"=m4, "Probit"=m5).
+
+- Class: text
+  Output: As it can be seen by the table produced by "huxreg", the results are very similar. In general,
+    the three estimation procedures produce very similar results. Here we finish this tutorial on 
+    using R to estimate models with binary (dummy) dependent variable.
