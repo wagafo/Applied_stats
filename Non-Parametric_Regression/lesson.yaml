@@ -75,7 +75,7 @@
     mutate package of the dplyr package, which has been loaded, with the
     code: task <- mutate(task, bins = cut(X, breaks = c(0,5,9,14))). Try 
     this code now.'
-  CorrectAnswer: taks <- mutate(task, bins = cut(X, breaks = c(0,5,9,14)))
+  CorrectAnswer: tasks <- mutate(task, bins = cut(X, breaks = c(0,5,9,14)))
   AnswerTests: omnitest(correctExpr='task <- mutate(task, bins = cut(X, breaks = c(0,5,9,14)))')
   Hint: You have to enter "task <- mutate(task, bins = cut(X, breaks = c(0,5,9,14)))" to bin the values of X in three groups.
 
